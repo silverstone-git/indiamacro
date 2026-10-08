@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 from . import _http
-from .sources import bis, budget, fred, imf, mospi, oecd, owid, pwt, worldbank
+from .sources import bis, budget, energy, fred, imf, mospi, oecd, owid, pwt, worldbank
 
 
 @dataclass
@@ -58,6 +58,22 @@ CHECKS = [
     Check("Penn World Table 11.0", "India human capital index", lambda: pwt.get("hc", "IND")),
     Check("Our World in Data", "India GDP per capita (Maddison)",
           lambda: owid.get("gdp-per-capita-maddison-project-database", "IND")),
+    Check("EIA spot (via FRED)", "Diesel crack vs Brent, daily (US$/bbl)",
+          lambda: energy.cracks(start="2026-01-01").reset_index().rename(columns={"diesel_crack": "value"})),
+    Check("NYMEX futures (Yahoo)", "Brent front-month (US$/bbl)",
+          lambda: energy.futures(["BZ"], start="2026-01-01").reset_index(names="date").rename(columns={"BZ": "value"})),
+    Check("World Bank Pink Sheet", "Dubai crude, monthly (US$/bbl)",
+          lambda: energy.pink_sheet().reset_index().rename(columns={"Crude oil, Dubai": "value"})),
+    Check("PPAC", "Indian crude basket, current fiscal year (US$/bbl)",
+          lambda: energy.indian_basket().reset_index().rename(columns={"official": "value"})),
+    Check("JODI Oil", "Saudi crude exports (kb/d)",
+          lambda: energy.jodi("TOTEXPSB", "CRUDEOIL", countries="SAU", start_year=pd.Timestamp.today().year - 1)),
+    Check("CREA Russia tracker", "Russian crude exports to India (t/month)",
+          lambda: energy.russia_exports("destination", start="2026-01-01", commodity="crude_oil")
+          .query("destination_country == 'India'").rename(columns={"value_tonne": "value"})),
+    Check("UN Comtrade", "India crude imports, one month (US$)",
+          lambda: energy.comtrade("IND", "crude", months=1, end=pd.Timestamp.today() - pd.DateOffset(months=4))
+          .groupby("date", as_index=False)["value_usd"].sum().rename(columns={"value_usd": "value"})),
 ]
 
 NOT_AUTOMATED = [
@@ -68,7 +84,7 @@ NOT_AUTOMATED = [
 ]
 
 
-def run(fresh: bool = False) -> pd.DataFrame:
+def run(fresh: bool = False, verbose: bool = True) -> pd.DataFrame:
     if fresh:
         _http.settings.cache = False
     rows = []
@@ -84,7 +100,8 @@ def run(fresh: bool = False) -> pd.DataFrame:
                          "latest_date": "", "latest_value": f"{type(e).__name__}: {str(e)[:100]}",
                          "seconds": round(time.perf_counter() - t, 1)})
         r = rows[-1]
-        print(f"{r['status']:4}  {r['source']:28} {r['query']:48} {r['latest_date']:>10}  {r['latest_value']}")
+        if verbose:
+            print(f"{r['status']:4}  {r['source']:28} {r['query']:48} {r['latest_date']:>10}  {r['latest_value']}")
     return pd.DataFrame(rows)
 
 

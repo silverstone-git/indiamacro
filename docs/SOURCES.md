@@ -82,5 +82,21 @@ because they are formatted reports. Past years: the budget archive.
 - `ourworldindata.org/grapher/{slug}.csv` - the slug is in any chart's URL.
 - `owid.metadata(slug)` gives the underlying sources to cite.
 
-### Not free
+## Energy - `im.energy`
+
+| Function | Source | Notes |
+|---|---|---|
+| `prices()`, `cracks()` | EIA spot prices via FRED (`DCOILBRENTEU`, `DCOILWTICO`, `DDFUELNYH`, `DDFUELUSGULF`, `DJFUELUSGULF`, `DGASNYH`) | Daily; products converted from $/gal to $/bbl (x42). Cracks = product minus Brent. |
+| `futures()`, `curve()` | NYMEX via Yahoo (`BZ=F`, `CL=F`, `HO=F`, `RB=F`; contracts like `BZZ26.NYM`) | Unlisted/expired contract months are skipped. |
+| `dated_to_frontline()` | EIA dated Brent minus NYMEX front month | Physical tightness; normally within +/-$2. |
+| `pink_sheet()` | World Bank Commodity Price Data | Monthly since 1960. The file URL changes each month; found from the commodity-markets page. |
+| `indian_basket()` | PPAC (`AjaxController/getInternationalPricesCrudeOil`, form POST) | PPAC serves only the current fiscal year without a login; history is a 75/25 Brent/Dubai proxy. |
+| `jodi()` | JODI Oil World Database annual CSVs (primary = crude, secondary = products) | Russia, Iraq, Iran don't report exports. Files are 5-10 MB per year (cached). |
+| `comtrade()` | UN Comtrade public preview API | One month per request, max 500 rows; partner names from the reference JSON. |
+| `russia_exports()` | CREA Russia Fossil Tracker API (`/v0/counter`) | Daily by commodity, monthly by destination; based on ship tracking. |
+
+Not reachable from the test machine: EIA's own API (`api.eia.gov`, timed out; most EIA prices are on FRED).
+Not free: ICE gasoil (European diesel), Platts/Argus assessments (Urals, Singapore products), Kpler/Vortexa tanker data.
+
+## Not free
 - **CMIE Economic Outlook / ProwessIQ** - paid; many college libraries subscribe.

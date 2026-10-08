@@ -35,3 +35,12 @@ def test_compare_india_first():
 def test_imf_projection_flag():
     df = im.imf.weo("NGDP_RPCH", "IND")
     assert df["projection"].eq(True).any() and df["projection"].eq(False).any()
+
+
+@pytest.mark.parametrize("story_id", [s for s in __import__("indiamacro.analysis", fromlist=["STORIES"]).STORIES
+                                      if not s.startswith("_")])
+def test_every_page_renders_without_errors(story_id):
+    from indiamacro.analysis import run
+    page = run(story_id)
+    errors = [b for b in page["blocks"] if b.get("kind") == "error"]
+    assert not errors, errors

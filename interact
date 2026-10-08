@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Open the indiamacro dashboard in your browser.
+#   ./interact                  start on http://localhost:8765 (or the next free port)
+#   ./interact --port 9000      pick a port
+#   ./interact --no-browser     just run the server
+set -euo pipefail
+cd "$(dirname "$(readlink -f "$0")")"
+if command -v uv >/dev/null 2>&1; then
+  exec uv run --quiet indiamacro-web "$@"
+elif [ -x .venv/bin/python ]; then
+  exec .venv/bin/python -m indiamacro.web "$@"
+else
+  echo "Needs uv (https://docs.astral.sh/uv/) or a .venv with indiamacro installed (pip install -e .)" >&2
+  exit 1
+fi

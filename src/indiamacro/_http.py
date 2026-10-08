@@ -13,6 +13,7 @@ from __future__ import annotations
 import hashlib
 import os
 import ssl
+import threading
 import time
 from pathlib import Path
 from urllib.parse import urlencode, urlsplit
@@ -88,20 +89,25 @@ def get(
     ttl: float | None = DAY,
     source: str = "http",
     headers: dict | None = None,
+    data: dict | None = None,
 ) -> bytes:
     """GET ``url`` and return the body, serving from the disk cache when fresh.
 
     ``ttl`` is in seconds; ``None`` caches forever (use for versioned files such as PWT).
+    Passing ``data`` sends a form POST instead (cached the same way, keyed on the form).
     """
     params = {k: v for k, v in (params or {}).items() if v is not None}
-    path = _cache_path(url, params)
+    path = _cache_path(url, {**params, **{f"_form_{k}": v for k, v in (data or {}).items()}})
     if settings.cache and path.exists():
         age = time.time() - path.stat().st_mtime
         if ttl is None or age < ttl:
             return path.read_bytes()
 
     try:
-        r = session().get(url, params=params, headers=headers, timeout=settings.timeout)
+        if data is None:
+            r = session().get(url, params=params, headers=headers, timeout=settings.timeout)
+        else:
+            r = session().post(url, params=params, data=data, headers=headers, timeout=settings.timeout)
     except requests.RequestException as e:
         raise SourceError(source, f"request failed: {e}") from e
     if r.status_code >= 400:
@@ -109,7 +115,7 @@ def get(
 
     if settings.cache:
         path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(".tmp")
+        tmp = path.with_suffix(f".{os.getpid()}.{threading.get_ident()}.tmp")   # safe under threads
         tmp.write_bytes(r.content)
         tmp.replace(path)
     return r.content

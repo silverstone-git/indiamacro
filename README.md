@@ -12,7 +12,38 @@ im.compare("gdp_growth", "BRICS")           # India vs peers, incl. IMF projecti
 im.mospi.nas(9, freq="Q")                   # any MoSPI table - here quarterly GFCF
 im.bis.credit_gap(["IND", "CHN"])           # BIS credit-to-GDP gap
 im.pwt.get(["hc", "rtfpna"], "IND")         # Penn World Table: human capital, TFP
+im.energy.cracks()                          # diesel/gasoline/jet cracks vs Brent, daily
+im.energy.curve("BZ")                       # today's Brent futures curve
+
+from indiamacro.analysis import events, run
+events.event_study(im.energy.cracks()["diesel_crack"], events.select("refinery_strike"), log=False)
+run("tpl_refinery", {"post": 10})           # any dashboard page, as data
 ```
+
+## The dashboard
+
+```bash
+./interact                 # opens http://localhost:8765 in your browser
+./interact --port 9000     # another port;  --no-browser to just serve
+```
+
+Every page is live data, rendered as interactive charts (zoom, hover, 1Y/5Y/All, PNG and CSV
+download), with a "What the data says" summary computed from the numbers and a method/caveats
+note you can cite.
+
+| Section | Pages |
+|---|---|
+| Overview | India at a glance: 12 headline tiles (growth, CPI, WPI, IIP, jobs, repo, rupee, reserves, Brent, Indian basket, diesel crack, physical premium) |
+| India | Growth and the cycle, inflation and policy, jobs, external sector, public finances, structural change |
+| Energy | Oil prices (USD, INR, real, since 1960), refining margins and cracks, futures curve and market tightness, who exports oil and to whom |
+| Analysis: shocks | Refinery strikes and the product shock, strategic reserve releases, oil pass-through to India, event study lab |
+| Analysis: trends | Catch-up growth and growth accounting, inflation regimes, compare countries |
+| Tools | Events (add your own shock dates), data explorer, source status |
+
+The analysis templates take parameters (event category, window, extra dates, country, indicator)
+and recompute on **Run**. Events you add on the Events page (say, last week's drone strike on a
+refinery) are saved to `~/.local/share/indiamacro/events.json` and immediately show up in event
+studies and as markers on charts.
 
 ## Sources
 
@@ -28,6 +59,7 @@ im.pwt.get(["hc", "rtfpna"], "IND")         # Penn World Table: human capital, T
 | `bis` | Bank for International Settlements | Policy rates, REER/NEER, credit gaps, private credit, house prices | no |
 | `pwt` | Penn World Table 11.0 | PPP GDP, capital, human capital, TFP, 185 countries since 1950 | no |
 | `owid` | Our World in Data | Any OWID chart's data (Maddison GDP back to 1 CE, poverty, inequality...) | no |
+| `energy` | EIA (via FRED), NYMEX (via Yahoo), World Bank Pink Sheet, PPAC, JODI, UN Comtrade, CREA | Daily crude and product prices, crack spreads, futures curve, physical premium, Indian basket, oil exports/imports by country, Russia's exports by destination | no |
 
 Run `uv run indiamacro-ping` to test every source live; the last run is in
 [docs/SOURCE_STATUS.md](docs/SOURCE_STATUS.md). [docs/SOURCES.md](docs/SOURCES.md)
@@ -44,6 +76,7 @@ uv sync                    # or: pip install -e .
 uv run pytest              # offline unit tests
 uv run pytest -m live      # live tests against every source
 uv run --extra plot python examples/india_vs_peers.py   # charts -> examples/output/
+./interact                 # the dashboard
 ```
 
 ## Conventions

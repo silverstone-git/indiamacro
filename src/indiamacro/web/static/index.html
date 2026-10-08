@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>indiamacro</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e8590c'/%3E%3Cpath d='M7 22l6-7 5 4 7-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/story/overview">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M7 22l6-7 5 4 7-9" /></svg>
+        </span>
+        <span><b>indiamacro</b><small>India-first macro data</small></span>
+      </a>
+      <nav id="nav" aria-label="Pages"></nav>
+      <div class="sidebar-foot">
+        <button class="ghost" id="refresh" title="Recompute pages from cached data">Refresh pages</button>
+        <button class="ghost" id="hard-refresh" title="Delete the download cache and fetch everything again">Re-download data</button>
+        <button class="ghost" id="theme" title="Toggle light/dark">Theme</button>
+      </div>
+    </aside>
+    <main id="main">
+      <button class="menu" id="menu" aria-label="Open menu">☰</button>
+      <div id="page"></div>
+    </main>
+  </div>
+  <template id="loading">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div><b>Fetching live data…</b><span class="timer"></span>
+        <p>First visits download from MoSPI, IMF, World Bank, FRED and others; later visits load from the cache.</p></div>
+    </div>
+  </template>
+</body>
+</html>
