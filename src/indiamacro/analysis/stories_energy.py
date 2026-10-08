@@ -200,6 +200,21 @@ def _(s: Builder):
                          "CREA Russia Fossil Tracker")
     s.chart(destinations, "half")
 
+    def china():
+        out = {}
+        for prod, name in (("GASDIES", "Diesel/gasoil"), ("GASOLINE", "Gasoline"), ("RESFUEL", "Fuel oil"),
+                           ("TOTPRODS", "All products")):
+            df = energy.jodi("TOTEXPSB", prod, countries="CHN", start_year=2022)
+            out[name] = df.set_index("date")["value"]
+        d = out["Diesel/gasoil"]
+        zero = d[d.index >= "2025-01-01"]
+        if len(zero) and (zero.iloc[-3:] == 0).all():
+            s.insight(f"China reported zero diesel exports in the last {int((zero[::-1].cumsum() == 0).sum())} "
+                      f"months to {d.index[-1]:%b %Y} (JODI).", 35)
+        return C.line(out, "China's refined product exports", "thousand bbl/day", "JODI Oil World Database",
+                      note="China sets export quotas; jet fuel is not reported separately.")
+    s.chart(china, "half")
+
     def india_imports():
         df = energy.comtrade("IND", "crude", "M", months=12)
         w = df.pivot_table(index="date", columns="partner", values="value_usd").fillna(0) / 1e9
@@ -211,3 +226,66 @@ def _(s: Builder):
                       f"{w.index[-1]:%b %Y} (Comtrade).", 40)
         return C.stacked(w, "India's crude imports by supplier", "US$ bn", "UN Comtrade (HS 2709)", bars=True)
     s.chart(india_imports, "half")
+
+
+@story("shipping", "Shipping routes and chokepoints", "Energy",
+       "Which sea routes are ships still using, and what is the market charging to move oil?",
+       method="Daily vessel transits through maritime chokepoints from IMF PortWatch (AIS ship tracking), "
+              "compared with each chokepoint's 2025 average. Tanker share prices stand in for freight and "
+              "insurance costs, which are not published freely.",
+       caveats=["AIS counts miss ships that switch their transponders off, which is common in conflict zones; "
+                "counts understate traffic during a crisis, but not by the size of the drops shown here.",
+                "War-risk insurance premiums (a % of hull value per transit) appear only in trade press and broker "
+                "notes; the Lloyd's Joint War Committee lists high-risk areas but publishes no prices.",
+                "Share prices reflect earnings expectations, fleet supply and the stock market as a whole, not "
+                "only freight rates."])
+def _(s: Builder):
+    def change():
+        df = D.chokepoints()
+        base = df[df["date"].dt.year == 2025].groupby("chokepoint")["n_total"].mean()
+        recent = df[df["date"] > df["date"].max() - pd.Timedelta(days=30)].groupby("chokepoint")["n_total"].mean()
+        chg = ((recent / base - 1) * 100).dropna().sort_values()
+        worst = chg.index[0]
+        s.insight(f"{worst}: {recent[worst]:.1f} vessels/day over the last 30 days vs {base[worst]:.1f} in 2025 "
+                  f"({chg[worst]:+.0f}%). Data to {df['date'].max():%d %b %Y}.", 10)
+        return C.bar(chg, "Transits, last 30 days vs 2025 average", "% change", "IMF PortWatch",
+                     horizontal=True, highlight=worst)
+    s.chart(change, "half")
+
+    def tankers_now():
+        df = D.chokepoints()
+        base = df[df["date"].dt.year == 2025].groupby("chokepoint")["n_tanker"].mean()
+        recent = df[df["date"] > df["date"].max() - pd.Timedelta(days=30)].groupby("chokepoint")["n_tanker"].mean()
+        t = pd.DataFrame({"2025 avg": base, "last 30 days": recent}).dropna().sort_values("2025 avg")
+        return {**C.bar({k: t[k] for k in t}, "Tanker transits per day", "tankers/day", "IMF PortWatch",
+                        horizontal=True), "grouped": True}
+    s.chart(tankers_now, "half")
+
+    def hormuz():
+        df = D.chokepoints()
+        w = df[df["chokepoint"].isin(["Strait of Hormuz", "Bab el-Mandeb Strait", "Bosporus Strait"])]
+        w = w.pivot_table(index="date", columns="chokepoint", values="n_tanker").rolling(7).mean()
+        return C.line(w["2024":], "Tanker transits, 7-day average", "tankers/day", "IMF PortWatch",
+                      events=E.select("geopolitical"))
+    s.chart(hormuz)
+
+    def indexed():
+        df = D.chokepoints()
+        m = df.pivot_table(index="date", columns="chokepoint", values="n_total").resample("MS").mean()
+        idx = (m / m.loc["2025"].mean() * 100)
+        keep = ["Strait of Hormuz", "Bab el-Mandeb Strait", "Suez Canal", "Cape of Good Hope", "Bosporus Strait",
+                "Malacca Strait", "Panama Canal"]
+        return C.line(idx[[k for k in keep if k in idx]]["2023":], "All-vessel transits, monthly (2025 average = 100)",
+                      "index", "IMF PortWatch", hbands=[{"y0": 100, "y1": 100, "label": "2025 average"}])
+    s.chart(indexed)
+
+    def equities():
+        px = D.shipping_equities()
+        idx = px / px.loc["2025-01"].mean() * 100
+        last = idx.ffill().iloc[-1].sort_values()
+        s.insight("Tanker shares vs January 2025: " + ", ".join(f"{k} {v - 100:+.0f}%" for k, v in last.items()
+                                                                 if k != "ZIM") + ".", 20)
+        return C.line(idx, "Shipping company shares (Jan 2025 = 100)", "index", "Yahoo Finance",
+                      note="Tanker owners: INSW, FRO, DHT (crude), STNG, TRMD (products). ZIM = containers.",
+                      events=E.select("geopolitical"))
+    s.chart(equities)

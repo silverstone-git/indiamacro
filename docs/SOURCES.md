@@ -94,9 +94,12 @@ because they are formatted reports. Past years: the budget archive.
 | `jodi()` | JODI Oil World Database annual CSVs (primary = crude, secondary = products) | Russia, Iraq, Iran don't report exports. Files are 5-10 MB per year (cached). |
 | `comtrade()` | UN Comtrade public preview API | One month per request, max 500 rows; partner names from the reference JSON. |
 | `russia_exports()` | CREA Russia Fossil Tracker API (`/v0/counter`) | Daily by commodity, monthly by destination; based on ship tracking. |
+| `chokepoints()` | IMF PortWatch, ArcGIS feature service `Daily_Chokepoints_Data` | Daily transits (all vessels, tankers, tanker capacity) for 28 chokepoints from 2019; AIS-based; paged 2,000 rows per request. |
+| `shipping_equities()` | Yahoo Finance (INSW, FRO, DHT, STNG, TRMD, ZIM) | Proxy for freight and insurance costs, not an index of either. |
+| `jodi(..., countries="CHN")` | JODI secondary file | China's product exports: GASDIES, GASOLINE, RESFUEL, TOTPRODS (no separate jet fuel). China customs (GACC) blocks automated access; Comtrade's free tier has no recent China data. |
 
 Not reachable from the test machine: EIA's own API (`api.eia.gov`, timed out; most EIA prices are on FRED).
-Not free: ICE gasoil (European diesel), Platts/Argus assessments (Urals, Singapore products), Kpler/Vortexa tanker data.
+Not free: ICE gasoil (European diesel), Platts/Argus assessments (Urals, Singapore products), Kpler/Vortexa tanker data, Baltic Exchange freight rates, and war-risk insurance premiums (trade press and brokers only; the Lloyd's Joint War Committee publishes listed areas, not prices).
 
 ## Not free
 - **CMIE Economic Outlook / ProwessIQ** - paid; many college libraries subscribe.

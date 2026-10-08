@@ -111,3 +111,13 @@ LAB_SERIES = {
     "bz_front": ("Brent front-month futures (US$/bbl)", lambda: futures()["BZ"], True, "%"),
     "usdinr": ("Rupees per US dollar", usdinr_daily, True, "%"),
 }
+
+
+@memo(3600)
+def chokepoints() -> pd.DataFrame:
+    return energy.chokepoints(start="2023-01-01")
+
+
+@memo(3600)
+def shipping_equities() -> pd.DataFrame:
+    return energy.shipping_equities(start="2024-01-01")

@@ -71,6 +71,8 @@ CHECKS = [
     Check("CREA Russia tracker", "Russian crude exports to India (t/month)",
           lambda: energy.russia_exports("destination", start="2026-01-01", commodity="crude_oil")
           .query("destination_country == 'India'").rename(columns={"value_tonne": "value"})),
+    Check("IMF PortWatch", "Strait of Hormuz vessel transits (per day)",
+          lambda: energy.chokepoints("Strait of Hormuz", start="2026-01-01").rename(columns={"n_total": "value"})),
     Check("UN Comtrade", "India crude imports, one month (US$)",
           lambda: energy.comtrade("IND", "crude", months=1, end=pd.Timestamp.today() - pd.DateOffset(months=4))
           .groupby("date", as_index=False)["value_usd"].sum().rename(columns={"value_usd": "value"})),

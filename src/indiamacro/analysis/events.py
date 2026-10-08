@@ -51,6 +51,8 @@ BUILTIN = [
     ("2023-02-05", "EU embargo and price caps on Russian refined products", "sanctions", "Russia"),
     # geopolitics / demand
     ("2022-02-24", "Russia invades Ukraine", "geopolitical", "Russia/Ukraine"),
+    # dated from the data itself (PortWatch daily transits), not from a news report
+    ("2026-03-02", "Strait of Hormuz transits collapse from ~90 to <5 vessels/day (IMF PortWatch)", "geopolitical", "Gulf"),
     ("2020-03-11", "WHO declares COVID-19 a pandemic", "demand", "Global"),
     ("2020-04-20", "WTI May futures settle below zero", "demand", "USA"),
     # India

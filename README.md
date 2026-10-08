@@ -35,7 +35,7 @@ note you can cite.
 |---|---|
 | Overview | India at a glance: 12 headline tiles (growth, CPI, WPI, IIP, jobs, repo, rupee, reserves, Brent, Indian basket, diesel crack, physical premium) |
 | India | Growth and the cycle, inflation and policy, jobs, external sector, public finances, structural change |
-| Energy | Oil prices (USD, INR, real, since 1960), refining margins and cracks, futures curve and market tightness, who exports oil and to whom |
+| Energy | Oil prices (USD, INR, real, since 1960), refining margins and cracks, futures curve and market tightness, who exports oil and to whom (incl. China's product exports), shipping routes and chokepoints |
 | Analysis: shocks | Refinery strikes and the product shock, strategic reserve releases, oil pass-through to India, event study lab |
 | Analysis: trends | Catch-up growth and growth accounting, inflation regimes, compare countries |
 | Tools | Events (add your own shock dates), data explorer, source status |
@@ -59,7 +59,7 @@ studies and as markers on charts.
 | `bis` | Bank for International Settlements | Policy rates, REER/NEER, credit gaps, private credit, house prices | no |
 | `pwt` | Penn World Table 11.0 | PPP GDP, capital, human capital, TFP, 185 countries since 1950 | no |
 | `owid` | Our World in Data | Any OWID chart's data (Maddison GDP back to 1 CE, poverty, inequality...) | no |
-| `energy` | EIA (via FRED), NYMEX (via Yahoo), World Bank Pink Sheet, PPAC, JODI, UN Comtrade, CREA | Daily crude and product prices, crack spreads, futures curve, physical premium, Indian basket, oil exports/imports by country, Russia's exports by destination | no |
+| `energy` | EIA (via FRED), NYMEX (via Yahoo), World Bank Pink Sheet, PPAC, JODI, UN Comtrade, CREA, IMF PortWatch | Daily crude and product prices, crack spreads, futures curve, physical premium, Indian basket, oil exports/imports by country, Russia's exports by destination, chokepoint transits (IMF PortWatch), shipping shares | no |
 
 Run `uv run indiamacro-ping` to test every source live; the last run is in
 [docs/SOURCE_STATUS.md](docs/SOURCE_STATUS.md). [docs/SOURCES.md](docs/SOURCES.md)
@@ -106,6 +106,9 @@ uv run --extra plot python examples/india_vs_peers.py   # charts -> examples/out
 5. **Freshness.** The MoSPI API can lag the official press releases (as of Oct 2026
    the base-2024 CPI and post-April-2026 WPI weren't loaded yet). For the very
    latest print, check the MoSPI/RBI press release and say so in your footnote.
+
+See **[LIMITATIONS.md](LIMITATIONS.md)** for the full list: missing data, lags, proxies,
+method caveats of each template, and which connections are fragile.
 
 ## Citing
 

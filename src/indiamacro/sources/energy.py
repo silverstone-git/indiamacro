@@ -18,6 +18,13 @@ Flows
     suppliers). Free preview tier: one month per request.
   * :func:`russia_exports` - CREA Russia Fossil Tracker: daily seaborne/pipeline export
     volumes by commodity and destination, from ship tracking.
+
+Routes
+  * :func:`chokepoints` - IMF PortWatch: daily vessel transits (tankers, all ships) through
+    28 maritime chokepoints, from AIS ship tracking. The best free gauge of whether a
+    route is being used; war-risk insurance premiums themselves are not published freely.
+  * :func:`shipping_equities` - tanker and container shipping share prices, a market
+    proxy for freight and insurance costs.
 """
 
 from __future__ import annotations
@@ -361,3 +368,65 @@ def russia_exports(by: str = "commodity", start="2022-01-01", end=None, commodit
     df = df[[c for c in keep if c in df]].sort_values("date", ignore_index=True)
     df.attrs.update(source="CREA Russia Fossil Tracker", unit="tonnes / EUR / USD")
     return df
+
+
+# ---------------------------------------------------------------- shipping routes
+
+PORTWATCH = ("https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/"
+             "Daily_Chokepoints_Data/FeatureServer/0/query")
+
+CHOKEPOINTS = ["Strait of Hormuz", "Bab el-Mandeb Strait", "Suez Canal", "Cape of Good Hope",
+               "Malacca Strait", "Bosporus Strait", "Panama Canal", "Gibraltar Strait", "Dover Strait",
+               "Taiwan Strait", "Lombok Strait", "Sunda Strait"]
+
+
+def chokepoints(names: list[str] | str | None = None, start="2023-01-01") -> pd.DataFrame:
+    """Daily transits through maritime chokepoints (IMF PortWatch), long format:
+    ``date, chokepoint, n_tanker, n_total, capacity_tanker``.
+
+    Counts come from AIS transponders: ships that switch AIS off are not counted, so
+    during conflicts the counts understate traffic (but not by a 95% collapse).
+    ``names=None`` returns :data:`CHOKEPOINTS`.
+    """
+    names = [names] if isinstance(names, str) else (names or CHOKEPOINTS)
+    quoted = ",".join("'" + n.replace("'", "''") + "'" for n in names)
+    rows, offset = [], 0
+    while True:
+        data = _http.get_json(PORTWATCH, {
+            "where": f"portname IN ({quoted}) AND date >= DATE '{pd.Timestamp(start).date()}'",
+            "outFields": "date,portname,n_tanker,n_total,capacity_tanker", "orderByFields": "date,portname",
+            "resultOffset": offset, "resultRecordCount": 2000, "f": "json"}, ttl=12 * 3600, source="portwatch")
+        if "error" in data:
+            raise _http.SourceError("portwatch", str(data["error"]))
+        feats = data.get("features", [])
+        rows += [f["attributes"] for f in feats]
+        if len(feats) < 2000 and not data.get("exceededTransferLimit"):
+            break
+        offset += len(feats)
+    if not rows:
+        raise _http.SourceError("portwatch", f"no data for {names}")
+    df = pd.DataFrame(rows).rename(columns={"portname": "chokepoint"})
+    df["date"] = pd.to_datetime(df["date"], unit="ms")
+    df = df.sort_values(["chokepoint", "date"], ignore_index=True)
+    df.attrs.update(source="IMF PortWatch (AIS-based)", unit="vessels per day")
+    return df[["date", "chokepoint", "n_tanker", "n_total", "capacity_tanker"]]
+
+
+SHIPPING_EQUITIES = {
+    "INSW": "International Seaways (crude and product tankers)",
+    "FRO": "Frontline (crude tankers)",
+    "DHT": "DHT Holdings (VLCCs)",
+    "STNG": "Scorpio Tankers (product tankers)",
+    "TRMD": "TORM (product tankers)",
+    "ZIM": "ZIM (container shipping)",
+}
+
+
+def shipping_equities(tickers: list[str] | None = None, start="2023-01-01") -> pd.DataFrame:
+    """Daily closing prices of shipping companies (Yahoo). Tanker shares rise with freight
+    rates, which in turn rise with longer routes, war-risk insurance and vessel scarcity.
+    A market proxy only - not a freight or insurance index."""
+    tickers = tickers or list(SHIPPING_EQUITIES)
+    out = _yahoo_close(tickers, start=start)
+    out.attrs.update(source="Yahoo Finance", unit="share price, local currency")
+    return out
