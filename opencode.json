@@ -1,0 +1,50 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "gateway/nemotron-super",
+  "agents": {
+    "title": { "model": "gateway/nemotron-lightning" }
+  },
+  "providers": {
+    "gateway": {
+      "name": "Local gateway",
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "http://127.0.0.1:4000/v1",
+        "apiKey": "{file:/home/ubuntu/cyto/agentcyto/cli-gateway/secrets/opencode.key}",
+        "timeout": 900000,
+        "headerTimeout": 900000,
+        "chunkTimeout": 900000
+      },
+      "models": {
+        "heavy":              { "name": "HEAVY (ordered fallback chain)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "heavy-tool":         { "name": "HEAVY tool-capable chain",     "capabilities": { "tools": true,  "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "light":              { "name": "LIGHT (ordered fallback chain)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "light-tool":         { "name": "LIGHT tool-capable chain",     "capabilities": { "tools": true,  "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "nemotron-super":     { "name": "Nemotron 3.5 Super VL (NVIDIA)", "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "nemotron-ultra":     { "name": "Nemotron 3 Ultra (NVIDIA)",  "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "nemotron-lightning": { "name": "Nemotron 3.5 Lightning",     "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "nemotron-bolt":      { "name": "Nemotron 3.5 Bolt",           "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 128000,  "output": 16384 } },
+        "gemini-flash":       { "name": "Gemini Flash",               "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }, "limit": { "context": 1048576, "output": 65536 } },
+        "gemini-flash-lite":  { "name": "Gemini Flash Lite",          "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 1048576, "output": 65536 } },
+        "muse-spark":         { "name": "Muse Spark (Meta API)",      "capabilities": { "tools": true, "input": ["text", "image"], "output": ["text"] }, "limit": { "context": 1048576, "output": 131072 } },
+        "muse-spark-cheap":   { "name": "Muse Spark contributor (API)", "capabilities": { "tools": true, "input": ["text"], "output": ["text"] }, "limit": { "context": 1048576, "output": 131072 } },
+        "muse-cli":           { "name": "Muse Code CLI (chat)",        "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "muse-cli-wonder":    { "name": "Muse Wonder via CLI",         "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "muse-cli-ember":     { "name": "Muse Ember via CLI",          "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "muse-agent":         { "name": "Muse Code agent (/workspaces/<session>)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000, "output": 32000 } },
+        "muse-agent-contributor": { "name": "Muse agent contributor", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000, "output": 32000 } },
+        "claude-cli":         { "name": "Claude via CLI (chat)",      "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "claude-cli-opus":    { "name": "Claude Opus via CLI (chat)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000,  "output": 32000 } },
+        "claude-agent":       { "name": "Claude Code agent (/workspaces/<session>)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 200000, "output": 32000 } },
+        "agy-cli":            { "name": "Antigravity via CLI (chat)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 1000000, "output": 65536 } },
+        "agy-agent":          { "name": "Antigravity agent (/workspaces/<session>)", "capabilities": { "tools": false, "input": ["text"], "output": ["text"] }, "limit": { "context": 1000000, "output": 65536 } }
+      }
+    },
+    "opencode": {
+      "canonical": "opencode",
+      "models": {
+        "big-pickle": { "name": "Big Pickle (OpenCode free tier)" }
+      }
+    }
+  }
+}

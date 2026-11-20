@@ -1,0 +1,740 @@
+{
+  "access_date": "2026-11-20",
+  "cache_enabled": false,
+  "countries": [
+    "IND",
+    "CHN",
+    "KOR",
+    "USA",
+    "DEU",
+    "BRA"
+  ],
+  "indicators": [
+    "GB.XPD.RSDV.GD.ZS",
+    "SP.POP.SCIE.RD.P6",
+    "SP.POP.TECH.RD.P6",
+    "IP.PAT.RESD",
+    "IP.PAT.NRES",
+    "IP.JRN.ARTC.SC",
+    "SE.XPD.TOTL.GD.ZS",
+    "HD.HCI.LAYS",
+    "HD.HCI.HLO",
+    "SE.LPV.PRIM"
+  ],
+  "calls": {
+    "GB.XPD.RSDV.GD.ZS": {
+      "call": "worldbank.get('GB.XPD.RSDV.GD.ZS', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 68.56,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Research and development expenditure (% of GDP)",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 25,
+          "latest_date": "2020-01-01",
+          "latest_value": 0.64558,
+          "first_date": "1996-01-01",
+          "first_value": 0.63905
+        },
+        "CHN": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 2.57729,
+          "first_date": "1996-01-01",
+          "first_value": 0.56014
+        },
+        "KOR": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 4.94352,
+          "first_date": "1996-01-01",
+          "first_value": 2.14233
+        },
+        "USA": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 3.44716,
+          "first_date": "1996-01-01",
+          "first_value": 2.45013
+        },
+        "DEU": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 3.1539,
+          "first_date": "1996-01-01",
+          "first_value": 2.13663
+        },
+        "BRA": {
+          "n_nonnull": 24,
+          "latest_date": "2023-01-01",
+          "latest_value": 1.1938,
+          "first_date": "2000-01-01",
+          "first_value": 1.04752
+        }
+      }
+    },
+    "SP.POP.SCIE.RD.P6": {
+      "call": "worldbank.get('SP.POP.SCIE.RD.P6', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 83.93,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Researchers in R&D (per million people)",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 8,
+          "latest_date": "2020-01-01",
+          "latest_value": 259.26325,
+          "first_date": "1996-01-01",
+          "first_value": 153.94902
+        },
+        "CHN": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 2107.27003,
+          "first_date": "1996-01-01",
+          "first_value": 447.0994
+        },
+        "KOR": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 9471.82543,
+          "first_date": "1996-01-01",
+          "first_value": 2186.08907
+        },
+        "USA": {
+          "n_nonnull": 27,
+          "latest_date": "2022-01-01",
+          "latest_value": 4937.49441,
+          "first_date": "1996-01-01",
+          "first_value": 3206.67656
+        },
+        "DEU": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 5926.07432,
+          "first_date": "1996-01-01",
+          "first_value": 2801.62099
+        },
+        "BRA": {
+          "n_nonnull": 15,
+          "latest_date": "2014-01-01",
+          "latest_value": 903.20079,
+          "first_date": "2000-01-01",
+          "first_value": 298.53981
+        }
+      }
+    },
+    "SP.POP.TECH.RD.P6": {
+      "call": "worldbank.get('SP.POP.TECH.RD.P6', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 40.9,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Technicians in R&D (per million people)",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 7,
+          "latest_date": "2018-01-01",
+          "latest_value": 73.05997,
+          "first_date": "1996-01-01",
+          "first_value": 110.77041
+        },
+        "CHN": {
+          "n_nonnull": 0,
+          "latest_date": null,
+          "latest_value": null,
+          "first_date": null,
+          "first_value": null
+        },
+        "KOR": {
+          "n_nonnull": 23,
+          "latest_date": "2018-01-01",
+          "latest_value": 1311.43521,
+          "first_date": "1996-01-01",
+          "first_value": 625.12265
+        },
+        "USA": {
+          "n_nonnull": 0,
+          "latest_date": null,
+          "latest_value": null,
+          "first_date": null,
+          "first_value": null
+        },
+        "DEU": {
+          "n_nonnull": 18,
+          "latest_date": "2017-01-01",
+          "latest_value": 2006.65327,
+          "first_date": "1996-01-01",
+          "first_value": 1354.51349
+        },
+        "BRA": {
+          "n_nonnull": 15,
+          "latest_date": "2014-01-01",
+          "latest_value": 969.90222,
+          "first_date": "2000-01-01",
+          "first_value": 335.9403
+        }
+      }
+    },
+    "IP.PAT.RESD": {
+      "call": "worldbank.get('IP.PAT.RESD', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 22.68,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Patent applications, residents",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 44,
+          "latest_date": "2024-01-01",
+          "latest_value": 63217.0,
+          "first_date": "1980-01-01",
+          "first_value": 1207.0
+        },
+        "CHN": {
+          "n_nonnull": 40,
+          "latest_date": "2024-01-01",
+          "latest_value": 1672001.0,
+          "first_date": "1985-01-01",
+          "first_value": 4065.0
+        },
+        "KOR": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 195786.0,
+          "first_date": "1980-01-01",
+          "first_value": 1241.0
+        },
+        "USA": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 270295.0,
+          "first_date": "1980-01-01",
+          "first_value": 62098.0
+        },
+        "DEU": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 40085.0,
+          "first_date": "1980-01-01",
+          "first_value": 28683.0
+        },
+        "BRA": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 5752.0,
+          "first_date": "1980-01-01",
+          "first_value": 2149.0
+        }
+      }
+    },
+    "IP.PAT.NRES": {
+      "call": "worldbank.get('IP.PAT.NRES', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 27.51,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Patent applications, nonresidents",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 44,
+          "latest_date": "2024-01-01",
+          "latest_value": 41940.0,
+          "first_date": "1980-01-01",
+          "first_value": 1817.0
+        },
+        "CHN": {
+          "n_nonnull": 40,
+          "latest_date": "2024-01-01",
+          "latest_value": 156053.0,
+          "first_date": "1985-01-01",
+          "first_value": 4493.0
+        },
+        "KOR": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 50459.0,
+          "first_date": "1980-01-01",
+          "first_value": 3829.0
+        },
+        "USA": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 332899.0,
+          "first_date": "1980-01-01",
+          "first_value": 42231.0
+        },
+        "DEU": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 19177.0,
+          "first_date": "1980-01-01",
+          "first_value": 19900.0
+        },
+        "BRA": {
+          "n_nonnull": 45,
+          "latest_date": "2024-01-01",
+          "latest_value": 19845.0,
+          "first_date": "1980-01-01",
+          "first_value": 6228.0
+        }
+      }
+    },
+    "IP.JRN.ARTC.SC": {
+      "call": "worldbank.get('IP.JRN.ARTC.SC', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 21.64,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Scientific and technical journal articles",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 228174.31,
+          "first_date": "1996-01-01",
+          "first_value": 18904.78
+        },
+        "CHN": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 932711.93,
+          "first_date": "1996-01-01",
+          "first_value": 33621.11
+        },
+        "KOR": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 71724.33,
+          "first_date": "1996-01-01",
+          "first_value": 8866.52
+        },
+        "USA": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 430843.27,
+          "first_date": "1996-01-01",
+          "first_value": 313391.54
+        },
+        "DEU": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 108782.34,
+          "first_date": "1996-01-01",
+          "first_value": 64230.05
+        },
+        "BRA": {
+          "n_nonnull": 28,
+          "latest_date": "2023-01-01",
+          "latest_value": 58292.04,
+          "first_date": "1996-01-01",
+          "first_value": 7645.85
+        }
+      }
+    },
+    "SE.XPD.TOTL.GD.ZS": {
+      "call": "worldbank.get('SE.XPD.TOTL.GD.ZS', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 14.69,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Government expenditure on education, total (% of GDP)",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 22,
+          "latest_date": "2022-01-01",
+          "latest_value": 4.09865814174589,
+          "first_date": "1997-01-01",
+          "first_value": 3.36137008666992
+        },
+        "CHN": {
+          "n_nonnull": 26,
+          "latest_date": "2023-01-01",
+          "latest_value": 3.89714002609253,
+          "first_date": "1971-01-01",
+          "first_value": 1.38654005527496
+        },
+        "KOR": {
+          "n_nonnull": 34,
+          "latest_date": "2022-01-01",
+          "latest_value": 5.40910005569458,
+          "first_date": "1970-01-01",
+          "first_value": 3.38403010368347
+        },
+        "USA": {
+          "n_nonnull": 7,
+          "latest_date": "2021-01-01",
+          "latest_value": 5.42038011550903,
+          "first_date": "2015-01-01",
+          "first_value": 4.93064022064209
+        },
+        "DEU": {
+          "n_nonnull": 19,
+          "latest_date": "2022-01-01",
+          "latest_value": 5.23916006088257,
+          "first_date": "1993-01-01",
+          "first_value": 4.39173984527588
+        },
+        "BRA": {
+          "n_nonnull": 25,
+          "latest_date": "2022-01-01",
+          "latest_value": 5.61920976638794,
+          "first_date": "1995-01-01",
+          "first_value": 4.56816005706787
+        }
+      }
+    },
+    "HD.HCI.LAYS": {
+      "call": "worldbank.get('HD.HCI.LAYS', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 6.13,
+      "rows_total": 66,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Learning-Adjusted Years of School",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 3,
+          "latest_date": "2020-01-01",
+          "latest_value": 7.10217046737671,
+          "first_date": "2017-01-01",
+          "first_value": 5.78
+        },
+        "CHN": {
+          "n_nonnull": 3,
+          "latest_date": "2020-01-01",
+          "latest_value": 9.27002716064453,
+          "first_date": "2017-01-01",
+          "first_value": 9.67
+        },
+        "KOR": {
+          "n_nonnull": 4,
+          "latest_date": "2020-01-01",
+          "latest_value": 11.684027671814,
+          "first_date": "2010-01-01",
+          "first_value": 12.2465448379517
+        },
+        "USA": {
+          "n_nonnull": 4,
+          "latest_date": "2020-01-01",
+          "latest_value": 10.556770324707,
+          "first_date": "2010-01-01",
+          "first_value": 10.3524398803711
+        },
+        "DEU": {
+          "n_nonnull": 4,
+          "latest_date": "2020-01-01",
+          "latest_value": 11.0330896377563,
+          "first_date": "2010-01-01",
+          "first_value": 11.2622528076172
+        },
+        "BRA": {
+          "n_nonnull": 4,
+          "latest_date": "2020-01-01",
+          "latest_value": 7.87283945083618,
+          "first_date": "2010-01-01",
+          "first_value": 7.64807891845703
+        }
+      }
+    },
+    "HD.HCI.HLO": {
+      "call": "worldbank.get('HD.HCI.HLO', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": false,
+      "seconds": 0.3,
+      "error": "SourceError: [worldbank] [{'id': '120', 'key': 'Invalid value', 'value': 'The provided parameter value is not valid'}]"
+    },
+    "SE.LPV.PRIM": {
+      "call": "worldbank.get('SE.LPV.PRIM', ['IND', 'CHN', 'KOR', 'USA', 'DEU', 'BRA'])",
+      "ok": true,
+      "seconds": 8.93,
+      "rows_total": 396,
+      "countries_returned": [
+        "BRA",
+        "CHN",
+        "DEU",
+        "IND",
+        "KOR",
+        "USA"
+      ],
+      "series_name": "Learning poverty: Share of Children at the End-of-Primary age below minimum reading proficiency adjusted by Out-of-School Children (%)",
+      "per_country": {
+        "IND": {
+          "n_nonnull": 1,
+          "latest_date": "2017-01-01",
+          "latest_value": 56.0705604553222,
+          "first_date": "2017-01-01",
+          "first_value": 56.0705604553222
+        },
+        "CHN": {
+          "n_nonnull": 1,
+          "latest_date": "2016-01-01",
+          "latest_value": 18.2000007629394,
+          "first_date": "2016-01-01",
+          "first_value": 18.2000007629394
+        },
+        "KOR": {
+          "n_nonnull": 3,
+          "latest_date": "2019-01-01",
+          "latest_value": 3.23008060455322,
+          "first_date": "2011-01-01",
+          "first_value": 3.04109954833984
+        },
+        "USA": {
+          "n_nonnull": 5,
+          "latest_date": "2021-01-01",
+          "latest_value": 9.69157028198242,
+          "first_date": "2001-01-01",
+          "first_value": 10.188796043396
+        },
+        "DEU": {
+          "n_nonnull": 5,
+          "latest_date": "2021-01-01",
+          "latest_value": 15.439902305603,
+          "first_date": "2001-01-01",
+          "first_value": 12.3255615234375
+        },
+        "BRA": {
+          "n_nonnull": 3,
+          "latest_date": "2019-01-01",
+          "latest_value": 46.8978614807128,
+          "first_date": "2006-01-01",
+          "first_value": 51.2911949157714
+        }
+      }
+    }
+  },
+  "search": {
+    "research and development": {
+      "ok": true,
+      "seconds": 1.94,
+      "n_matches": 1,
+      "matches": [
+        {
+          "id": "GB.XPD.RSDV.GD.ZS",
+          "name": "Research and development expenditure (% of GDP)",
+          "unit": ""
+        }
+      ]
+    },
+    "researchers in r&d": {
+      "ok": true,
+      "seconds": 0.07,
+      "n_matches": 1,
+      "matches": [
+        {
+          "id": "SP.POP.SCIE.RD.P6",
+          "name": "Researchers in R&D (per million people)",
+          "unit": ""
+        }
+      ]
+    },
+    "patent applications": {
+      "ok": true,
+      "seconds": 0.07,
+      "n_matches": 2,
+      "matches": [
+        {
+          "id": "IP.PAT.NRES",
+          "name": "Patent applications, nonresidents",
+          "unit": ""
+        },
+        {
+          "id": "IP.PAT.RESD",
+          "name": "Patent applications, residents",
+          "unit": ""
+        }
+      ]
+    },
+    "scientific and technical journal": {
+      "ok": true,
+      "seconds": 0.07,
+      "n_matches": 1,
+      "matches": [
+        {
+          "id": "IP.JRN.ARTC.SC",
+          "name": "Scientific and technical journal articles",
+          "unit": ""
+        }
+      ]
+    },
+    "government expenditure on education": {
+      "ok": true,
+      "seconds": 0.06,
+      "n_matches": 5,
+      "matches": [
+        {
+          "id": "SE.XPD.PRIM.ZS",
+          "name": "Expenditure on primary education (% of government expenditure on education)",
+          "unit": ""
+        },
+        {
+          "id": "SE.XPD.SECO.ZS",
+          "name": "Expenditure on secondary education (% of government expenditure on education)",
+          "unit": ""
+        },
+        {
+          "id": "SE.XPD.TERT.ZS",
+          "name": "Expenditure on tertiary education (% of government expenditure on education)",
+          "unit": ""
+        },
+        {
+          "id": "SE.XPD.TOTL.GB.ZS",
+          "name": "Government expenditure on education, total (% of government expenditure)",
+          "unit": ""
+        },
+        {
+          "id": "SE.XPD.TOTL.GD.ZS",
+          "name": "Government expenditure on education, total (% of GDP)",
+          "unit": ""
+        }
+      ]
+    },
+    "learning-adjusted": {
+      "ok": true,
+      "seconds": 0.1,
+      "n_matches": 0,
+      "matches": []
+    },
+    "learning poverty": {
+      "ok": true,
+      "seconds": 0.1,
+      "n_matches": 3,
+      "matches": [
+        {
+          "id": "SE.LPV.PRIM",
+          "name": "Learning poverty: Share of Children at the End-of-Primary age below minimum reading proficiency adjusted by Out-of-School Children (%)",
+          "unit": ""
+        },
+        {
+          "id": "SE.LPV.PRIM.FE",
+          "name": "Learning poverty: Share of Female Children at the End-of-Primary age below minimum reading proficiency adjusted by Out-of-School Children (%)",
+          "unit": ""
+        },
+        {
+          "id": "SE.LPV.PRIM.MA",
+          "name": "Learning poverty: Share of Male Children at the End-of-Primary age below minimum reading proficiency adjusted by Out-of-School Children (%)",
+          "unit": ""
+        }
+      ]
+    },
+    "harmonized learning outcomes": {
+      "ok": true,
+      "seconds": 0.09,
+      "n_matches": 0,
+      "matches": []
+    }
+  },
+  "errors": [
+    {
+      "indicator": "HD.HCI.HLO",
+      "error": "SourceError: [worldbank] [{'id': '120', 'key': 'Invalid value', 'value': 'The provided parameter value is not valid'}]"
+    }
+  ],
+  "api_checks": {
+    "worldbank_get": true,
+    "worldbank_search": true,
+    "im_worldbank": true,
+    "im_energy": false,
+    "im_compare": true,
+    "package_version": "0.1.0",
+    "compare_indicators": [
+      "gdp_growth",
+      "inflation",
+      "gdp_usd",
+      "gdp_per_capita_ppp",
+      "share_world_gdp_ppp",
+      "unemployment",
+      "govt_debt",
+      "fiscal_balance",
+      "current_account",
+      "exports_gdp",
+      "investment_gdp",
+      "savings_gdp",
+      "fdi_gdp",
+      "manufacturing_gdp",
+      "female_lfpr",
+      "population"
+    ],
+    "wb_indicator_dict_codes": [
+      "NY.GDP.MKTP.KD.ZG",
+      "NY.GDP.MKTP.CD",
+      "NY.GDP.PCAP.PP.KD",
+      "NY.GDP.PCAP.KD",
+      "FP.CPI.TOTL.ZG",
+      "SL.UEM.TOTL.ZS",
+      "SL.TLF.CACT.FE.ZS",
+      "NE.EXP.GNFS.ZS",
+      "NE.IMP.GNFS.ZS",
+      "NE.GDI.TOTL.ZS",
+      "NY.GNS.ICTR.ZS",
+      "BN.CAB.XOKA.GD.ZS",
+      "BX.KLT.DINV.WD.GD.ZS",
+      "GC.DOD.TOTL.GD.ZS",
+      "FI.RES.TOTL.CD",
+      "SI.POV.DDAY",
+      "SI.POV.GINI",
+      "SP.POP.TOTL",
+      "SP.URB.TOTL.IN.ZS",
+      "NV.AGR.TOTL.ZS",
+      "NV.IND.MANF.ZS",
+      "NV.SRV.TOTL.ZS"
+    ]
+  }
+}
