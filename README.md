@@ -78,6 +78,10 @@ writes the answer. Without an endpoint, a **mock analyst** answers from the same
 clearly labelled. Every number in an answer comes from a tool result. For testing without a key:
 `uv run python -m indiamacro.monitor.fake_llm` and point `LLM_ENDPOINT` at `http://127.0.0.1:8799/v1`.
 
+**Hosted copy.** `./deploy.sh` publishes the dashboard and terminal to `https://t.aryan.cfd/indiamacro/`
+(terminal at `/indiamacro/terminal`) behind a password: set `INDIAMACRO_USERNAME` and `INDIAMACRO_KEY` in
+`.env` and the script writes the nginx password file, restarts the API service and checks the public URLs.
+
 **SIM badges.** If a live source fails, its panel switches to a simulated stand-in with a pink **SIM** badge
 (hover any badge for source, time and error). `INDIAMACRO_DEMO=1` forces simulation everywhere, for offline
 demos. Never quote a SIM number.

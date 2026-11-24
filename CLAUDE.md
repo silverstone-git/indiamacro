@@ -117,6 +117,11 @@ event study; use `log=False` for spreads/levels such as cracks.
 - Charts: one y-axis only (different units -> small multiples); categorical colours in fixed order.
 - LLM config: `LLM_ENDPOINT`/`LLM_API_KEY`/`LLM_MODEL`, with `OPENAI_BASE_URL`/`OPENAI_API_KEY`/`OPENAI_MODEL`
   as fallbacks. `.env` is gitignored; never commit it.
+- Front-end URLs are relative (`api/...`, `static/...`, `terminal.html`) so one set of files serves at `/` locally
+  and under `/indiamacro/` in production. Keep it that way.
+- Production: `./deploy.sh` (tests, copy to /var/www/indiamacro, restart `indiamacro-web` on :8765, smoke test).
+  nginx (`/etc/nginx/sites-available/t.aryan.cfd`) password-protects `/indiamacro/` and `/indiamacro/api/`
+  with `/etc/nginx/.htpasswd-indiamacro`, generated from `INDIAMACRO_USERNAME`/`INDIAMACRO_KEY` in `.env`.
 - Basemap is Esri dark gray (CARTO now needs a key). CelesTrak asks for <= 1 download per group per 2 h.
 
 ## Known issue

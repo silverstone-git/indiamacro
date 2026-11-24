@@ -163,6 +163,8 @@ the dashboard shows an error card in place of that chart and everything else sti
 
 ## 7. Dashboard limitations
 
+- **The hosted copy** (t.aryan.cfd/indiamacro) sits behind one shared HTTP basic-auth password. Everyone
+  with it can add/delete events, clear the cache and use the AI analyst (30 questions per hour per IP).
 - **Local and single-user.** No login and no access control. `--host 0.0.0.0` exposes
   it, *including the ability to add and delete events*, to anyone on your network.
 - **Needs internet** for the charting library (Plotly, from jsdelivr) and fonts (Google
