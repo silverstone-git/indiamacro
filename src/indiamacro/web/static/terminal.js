@@ -745,7 +745,7 @@ function renderChart() {
     title: { text: c.title, font: { size: 12, color: "#ffa028" }, x: 0.01, xanchor: "left" },
     xaxis: { gridcolor: "#1b1e23", linecolor: "#23262d", zeroline: false },
     yaxis: { gridcolor: "#1b1e23", zerolinecolor: "#3a3e46", title: { text: c.yaxis || "", font: { size: 10 } } },
-    legend: { orientation: "h", y: 1.0, yanchor: "bottom", x: 1, xanchor: "right", font: { size: 10 } },
+    legend: { orientation: "h", y: -0.1, yanchor: "top", x: 0, xanchor: "left", font: { size: 10 } },
     hovermode: c.type === "bar" ? "closest" : "x unified", hoverlabel: { bgcolor: "#121418", bordercolor: "#23262d", font: { color: "#e6e6e6" } },
     shapes: [],
   };
@@ -757,6 +757,7 @@ function renderChart() {
   } else {
     data = (c.traces || []).map((t, i) => ({ type: "scatter", mode: "lines", name: t.name, x: t.x, y: t.y, line: { width: 1.8, color: CAT[i % CAT.length] } }));
     layout.showlegend = data.length > 1;
+    if (layout.showlegend) layout.margin.b = 56;
     const xmax = data.flatMap((d) => d.x || []).reduce((m, x) => x > m ? x : m, "");
     if (c.shade_from && xmax > c.shade_from) layout.shapes.push({ type: "rect", xref: "x", yref: "paper", x0: c.shade_from, x1: xmax, y0: 0, y1: 1, fillcolor: "rgba(255,160,40,.06)", line: { width: 0 } });
     if (c.vline) layout.shapes.push({ type: "line", xref: "x", yref: "paper", x0: c.vline, x1: c.vline, y0: 0, y1: 1, line: { color: "#ffa028", dash: "dot", width: 1 } });
