@@ -220,6 +220,9 @@ class Handler(BaseHTTPRequestHandler):
 def _free_port(host: str, preferred: int) -> int:
     for port in range(preferred, preferred + 50):
         with socket.socket() as s:
+            # same option the server sets: a socket in TIME_WAIT from a just-stopped instance is not "taken"
+            # (without this, `systemctl restart` could silently move the service to 8766, behind nginx's back)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 s.bind((host, port))
                 return port
