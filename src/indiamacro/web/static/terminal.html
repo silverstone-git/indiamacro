@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>indiamacro terminal</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23000'/%3E%3Cpath d='M6 22l6-7 5 4 8-9' stroke='%23ffa028' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="static/terminal.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/satellite.js@5.0.0/dist/satellite.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js" defer></script>
+  <script src="static/terminal.js" defer></script>
+</head>
+<body>
+<div class="term">
+  <header class="top">
+    <a class="brand" href="terminal.html" title="indiamacro terminal"><b>IMX</b><span>TERMINAL</span></a>
+    <form id="cmd-form" class="cmd" autocomplete="off">
+      <span class="prompt">&gt;</span>
+      <input id="cmd" spellcheck="false" placeholder="Type a command or a question — e.g. CORR brent usdinr · G nifty gold · CMP inflation BRICS · MIL · how does oil affect the rupee?   ( / to focus )">
+      <button type="submit">GO</button>
+      <div id="cmd-hints" class="hints" hidden></div>
+    </form>
+    <div class="status">
+      <span id="llm-status" class="pill">AI …</span>
+      <a class="pill link" href="./" title="Story dashboard with explained analyses">DASHBOARD</a>
+    </div>
+    <div class="clocks" id="clocks"></div>
+  </header>
+
+  <div class="tape" id="tape"><div class="tape-inner" id="tape-inner"></div></div>
+
+  <section class="col left">
+    <div class="panel grow">
+      <div class="ph"><b>WATCH</b><span class="badge" id="b-quotes">…</span></div>
+      <div class="pb scroll" id="watch"></div>
+    </div>
+    <div class="panel">
+      <div class="ph"><b>INDIA MACRO</b><span class="badge" id="b-india">…</span></div>
+      <div class="pb" id="india"></div>
+    </div>
+  </section>
+
+  <section class="col center">
+    <div class="panel map-panel">
+      <div class="ph tabs" id="modes">
+        <button data-mode="econ" title="Alt+1">1 ECON</button>
+        <button data-mode="traffic" title="Alt+2">2 TRAFFIC</button>
+        <button data-mode="climate" title="Alt+3">3 CLIMATE</button>
+        <button data-mode="gnss" title="Alt+4">4 GNSS</button>
+        <button data-mode="astro" title="Alt+5">5 ASTRO</button>
+        <button data-mode="mil" title="Alt+6">6 MIL-SAT</button>
+        <span class="spacer"></span>
+        <label class="chk"><input type="checkbox" id="opt-night" checked> day/night</label>
+        <span class="badge" id="b-map">…</span>
+      </div>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div class="map-ctl" id="map-ctl"></div>
+        <div class="map-side" id="map-side"></div>
+      </div>
+    </div>
+    <div class="panel work">
+      <div class="ph tabs" id="work-tabs"><b>CHART</b><span class="spacer"></span>
+        <button id="work-clear" class="mini" title="Clear charts">CLR</button></div>
+      <div class="pb" id="work"><div class="empty">Charts from commands and answers appear here.<br>
+        Try <code>G india_cpi repo_rate</code>, <code>CORR brent usdinr</code> or <code>CMP gdp_growth G20</code>.</div></div>
+    </div>
+  </section>
+
+  <section class="col right">
+    <div class="panel ask">
+      <div class="ph"><b>ASK</b><span class="sub" id="ask-mode"></span><span class="spacer"></span>
+        <button id="ask-clear" class="mini" title="Forget the conversation">NEW</button></div>
+      <div class="pb scroll" id="chat"></div>
+      <form id="ask-form" class="ask-form">
+        <textarea id="ask" rows="2" placeholder="Ask the data a question… (Enter to send, Shift+Enter for a new line)"></textarea>
+        <button type="submit">ASK</button>
+      </form>
+    </div>
+    <div class="panel wire">
+      <div class="ph"><b>WIRE</b><span class="sub">quakes · hazards · markets · shipping · air</span></div>
+      <div class="pb scroll" id="wire"></div>
+    </div>
+  </section>
+
+  <footer class="foot" id="foot">
+    Data: Yahoo Finance (delayed), USGS, NASA EONET &amp; GIBS, OpenSky Network, Open-Meteo/CAMS, CelesTrak, IMF PortWatch &amp; WEO,
+    MoSPI, RBI, FRED, BIS. Basemap © Esri, © OpenStreetMap contributors. <b class="sim">SIM</b> = simulated stand-in, never real data.
+  </footer>
+</div>
+</body>
+</html>

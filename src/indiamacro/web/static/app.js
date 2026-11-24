@@ -105,7 +105,7 @@ async function renderStory(id, params) {
   const timer = setInterval(() => { const t = $(".timer", loader); if (t) t.textContent = `${((performance.now() - t0) / 1000).toFixed(0)}s`; }, 500);
   let story;
   try {
-    story = await api(`/api/story/${id}?` + new URLSearchParams(params));
+    story = await api(`api/story/${id}?` + new URLSearchParams(params));
   } catch (e) {
     clearInterval(timer);
     loader.replaceWith(h("div", { class: "card error" }, h("h2", {}, "Couldn't load this page"), h("pre", {}, e.message)));
@@ -358,13 +358,13 @@ async function renderEvents(filter = "all") {
   page.innerHTML = "";
   page.append(head("Tools", "Events", "The dated shocks and policy moves marked on charts and used by the event-study templates. Add your own - e.g. a refinery strike from last week."));
   let data;
-  try { data = await api("/api/events"); } catch (e) { page.append(h("div", { class: "card error" }, h("pre", {}, e.message))); return; }
+  try { data = await api("api/events"); } catch (e) { page.append(h("div", { class: "card error" }, h("pre", {}, e.message))); return; }
   const cats = data.categories;
   const form = h("form", { class: "params events-form", onsubmit: async (e) => {
     e.preventDefault();
     const f = e.target.elements;
     try {
-      await api("/api/events", { method: "POST", body: JSON.stringify({ date: f.date.value, label: f.label.value, category: f.category.value, region: f.region.value }) });
+      await api("api/events", { method: "POST", body: JSON.stringify({ date: f.date.value, label: f.label.value, category: f.category.value, region: f.region.value }) });
       toast("Event added - event studies now include it");
       renderEvents(filter);
     } catch (err) { toast(err.message); }
@@ -386,7 +386,7 @@ async function renderEvents(filter = "all") {
       h("td", {}, h("span", { class: "tag" + (e.builtin ? "" : " mine") }, cats[e.category] || e.category)),
       h("td", {}, e.region || ""),
       h("td", {}, e.builtin ? h("span", { class: "unit" }, "built-in") : h("button", { class: "del", title: "Delete", onclick: async () => {
-        await api(`/api/events/${e.id}`, { method: "DELETE" }); toast("Event removed"); renderEvents(filter);
+        await api(`api/events/${e.id}`, { method: "DELETE" }); toast("Event removed"); renderEvents(filter);
       } }, "✕"))))))),
     h("div", { class: "card-foot" }, h("div", { class: "src" }, `Your events are saved in ${data.file}`))));
 }
@@ -396,12 +396,12 @@ async function boot() {
   try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
   $("#theme").onclick = () => applyTheme(currentTheme() === "dark" ? "light" : "dark");
   $("#menu").onclick = () => $("#sidebar").classList.toggle("open");
-  $("#refresh").onclick = async () => { await api("/api/refresh", { method: "POST", body: "{}" }); toast("Pages will be recomputed"); route(); };
+  $("#refresh").onclick = async () => { await api("api/refresh", { method: "POST", body: "{}" }); toast("Pages will be recomputed"); route(); };
   $("#hard-refresh").onclick = async () => {
     if (!confirm("Delete the local download cache and fetch everything again? The next page loads will be slow.")) return;
-    await api("/api/refresh", { method: "POST", body: JSON.stringify({ hard: true }) }); toast("Cache cleared"); route();
+    await api("api/refresh", { method: "POST", body: JSON.stringify({ hard: true }) }); toast("Cache cleared"); route();
   };
-  try { CATALOG = await api("/api/catalog"); }
+  try { CATALOG = await api("api/catalog"); }
   catch (e) { $("#page").append(h("div", { class: "card error" }, h("h2", {}, "Server not reachable"), h("pre", {}, e.message))); return; }
   buildNav();
   window.addEventListener("hashchange", route);

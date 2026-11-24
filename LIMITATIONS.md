@@ -175,10 +175,41 @@ the dashboard shows an error card in place of that chart and everything else sti
 - Tested in Chromium on Linux (desktop and narrow widths). Other browsers should work
   but weren't tested.
 
+### The terminal (`/terminal`)
+
+- **Delays.** Market quotes are Yahoo Finance 5-minute bars, delayed up to 20 minutes depending on the
+  exchange; they are not a trading feed. Chokepoint transits lag about a week. Satellite imagery is daily
+  with gaps. Hover a panel's LIVE badge to see when it was fetched. *What to do:* check the timestamp
+  before you quote a number, and quote the original producer, not the terminal.
+- **Simulated fallbacks.** When a source fails, the panel shows made-up data under a pink SIM badge, and
+  analyst answers say "SIMULATED". These numbers mean nothing.
+- **Aircraft** come from OpenSky's volunteer ADS-B receivers, with anonymous access: coverage is thin
+  over oceans and parts of Asia and Africa, there is a daily request quota, and large views are trimmed.
+  Counts are a floor, not a census. Military and some private flights are not shown.
+- **Satellites.** Positions are propagated in the browser from CelesTrak's public elements (good to a few km
+  near the element epoch, worse after). The MIL-SAT layer shows only **publicly catalogued** objects found
+  by name queries (USA-nnn, Yaogan, Gaofen, RISAT, Cartosat, EMISAT, GSAT-7, Ofeq, SAR-Lupe, IGS, Lacrosse,
+  Bars-M, Lotos, Topaz) plus CelesTrak's military group. Classified payloads are missing, some elements are
+  deliberately stale, and "USA-nnn" also covers non-reconnaissance government satellites. The overflight
+  watch checks only whether the point directly below a satellite enters the box; real sensors see farther.
+  Treat it as indicative, not intelligence.
+- **GNSS "in view"** counts satellites above 10° elevation from the observer, ignoring terrain, buildings
+  and satellite health flags.
+- **Astronomy** uses low-precision formulas (about 1°): fine for a world map, not for observing or navigation.
+- **Air quality** is the CAMS model estimate via Open-Meteo, not a ground monitor. For official Indian
+  readings use CPCB.
+- **The analyst** can still misread or over-interpret tool output, and an LLM may add background knowledge
+  that is not in the data. Check every number against the evidence block or the chart. Lead/lag results are
+  found by searching many lags, so they overstate significance; the rolling correlation shows how unstable
+  they usually are. India CPI here is base 2012 and stops where that series ends; it is never spliced with
+  the 2024 base.
+- **Basemap and imagery** come from Esri and NASA GIBS tile servers; both need internet and may rate-limit.
+
 ## 8. Testing limitations
 
-- **Offline tests** (43) cover date handling, pagination, the event-study maths, the
-  events store, chart specs and server helpers. They don't contain recorded
+- **Offline tests** (64) cover date handling, pagination, the event-study maths, the
+  events store, chart specs, server helpers and the terminal (planner, transforms, lead/lag
+  maths, simulated fallbacks, `.env` parsing, and the LLM tool loop against a fake server). They don't contain recorded
   responses from each source, so a change in a source's format is caught only by the
   live tests.
 - **Live tests** (49) check that every source returns data and every page renders

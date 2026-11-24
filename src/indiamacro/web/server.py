@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import socket
 import sys
 import threading
@@ -21,15 +22,36 @@ from urllib.parse import parse_qsl, urlsplit
 
 from .. import _http
 from ..analysis import catalog, events, framework, run
+from ..monitor import assistant, feeds
+from ..monitor import query as mquery
 
 STATIC = Path(__file__).parent / "static"
-TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
+TYPES = {".geojson": "application/geo+json", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
          ".css": "text/css; charset=utf-8", ".svg": "image/svg+xml", ".ico": "image/x-icon"}
 SECTIONS = ["Overview", "India", "Energy", "Shocks", "Trends", "Tools"]
 
 _cache: dict = {}
 _cache_lock = threading.Lock()
 STORY_TTL = 600
+
+# The analyst spends the owner's LLM credits, and the server may sit behind a public proxy:
+# cap questions per client IP per hour (INDIAMACRO_ASK_PER_HOUR, default 30; 0 = unlimited).
+ASK_PER_HOUR = int(os.environ.get("INDIAMACRO_ASK_PER_HOUR", "30"))
+_asks: dict[str, list[float]] = {}
+_asks_lock = threading.Lock()
+
+
+def _ask_allowed(ip: str) -> bool:
+    if ASK_PER_HOUR <= 0:
+        return True
+    now = time.time()
+    with _asks_lock:
+        recent = [t for t in _asks.get(ip, []) if now - t < 3600]
+        if len(recent) >= ASK_PER_HOUR:
+            _asks[ip] = recent
+            return False
+        _asks[ip] = recent + [now]
+        return True
 
 
 def _story(story_id: str, params: dict) -> dict:
@@ -97,6 +119,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._static("index.html")
             if path.startswith("/static/"):
                 return self._static(path.removeprefix("/static/"))
+            if path in ("/terminal", "/terminal.html"):
+                return self._static("terminal.html")
+            if path.startswith("/api/live/"):
+                return self._live(path.removeprefix("/api/live/"), query)
+            if path == "/api/ask/status":
+                return self._json(assistant.status())
+            if path == "/api/series":
+                return self._json({"series": [{"key": k, "label": s.label, "unit": s.unit, "source": s.source,
+                                               "aliases": s.aliases} for k, s in mquery.SERIES.items()],
+                                   "transforms": mquery.TRANSFORMS})
             if path == "/api/catalog":
                 return self._json({"sections": SECTIONS, "stories": catalog(),
                                    "categories": events.CATEGORIES})
@@ -123,14 +155,30 @@ class Handler(BaseHTTPRequestHandler):
                 ev = events.add(b["date"], b["label"], b["category"], b.get("region", ""))
                 _clear_memory()
                 return self._json(ev, 201)
+            if path == "/api/ask":
+                b = self._body()
+                q = str(b.get("question", "")).strip()[:2000]
+                if not q:
+                    return self._error(400, "empty question")
+                ip = self.headers.get("X-Real-IP") or self.client_address[0]
+                if not _ask_allowed(ip):
+                    return self._error(429, f"limit of {ASK_PER_HOUR} questions per hour reached; commands "
+                                            "(G, CORR, CMP, WIN) still work without the AI")
+                return self._json(assistant.ask(q, b.get("history") or [], str(b.get("context", ""))[:2000]))
+            if path == "/api/tool":
+                b = self._body()
+                if b.get("name") not in mquery.TOOLS:
+                    return self._error(400, f"unknown tool; choose from {list(mquery.TOOLS)}")
+                return self._json(mquery.call(b["name"], dict(b.get("args") or {})))
             if path == "/api/refresh":
                 hard = self._body().get("hard", False)
                 _clear_memory()
+                feeds.clear()
                 if hard:
                     _http.clear_cache()
                 return self._json({"ok": True, "hard": hard})
             return self._error(404, "not found")
-        except (KeyError, ValueError) as e:
+        except (KeyError, ValueError, TypeError) as e:
             return self._error(400, str(e))
         except Exception as e:
             traceback.print_exc()
@@ -143,6 +191,24 @@ class Handler(BaseHTTPRequestHandler):
             _clear_memory()
             return self._json({"removed": ok}, 200 if ok else 404)
         return self._error(404, "not found")
+
+    def _live(self, feed: str, q: dict):
+        if feed == "world.geojson":
+            return self._send(200, feeds.world_geojson(), "application/geo+json")
+        simple = {"quotes": feeds.quotes, "quakes": feeds.quakes, "events": feeds.natural_events,
+                  "weather": feeds.weather, "chokepoints": feeds.chokepoints, "india": feeds.india_snapshot}
+        if feed in simple:
+            return self._json(simple[feed]())
+        if feed == "aircraft":
+            bbox = tuple(float(x) for x in q.get("bbox", "").split(",")) if q.get("bbox") else feeds.INDIA_BBOX
+            if len(bbox) != 4:
+                return self._error(400, "bbox=lamin,lomin,lamax,lomax")
+            return self._json(feeds.aircraft(bbox))
+        if feed == "satellites":
+            return self._json(feeds.satellites(q.get("group", "gnss")))
+        if feed == "econ":
+            return self._json(feeds.econ_map(q.get("indicator", "NGDP_RPCH"), q.get("year") or None))
+        return self._error(404, f"no live feed {feed!r}")
 
     def _static(self, name: str):
         f = (STATIC / name).resolve()

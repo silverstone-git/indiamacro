@@ -11,7 +11,8 @@ uv sync                                  # install (Python >= 3.10, hatchling bu
 uv run pytest                            # offline tests only (addopts = -m 'not live'); ~3 s
 uv run pytest -m live                    # live tests: hit every real source over the network
 uv run indiamacro-ping [--fresh] [--markdown docs/SOURCE_STATUS.md]   # live health check of all sources
-./interact [--port 9000] [--no-browser]  # dashboard at http://localhost:8765 (= uv run indiamacro-web)
+./interact [--port 9000] [--no-browser]  # dashboard at http://localhost:8765 (= uv run indiamacro-web); terminal at /terminal
+uv run python -m indiamacro.monitor.fake_llm                         # fake OpenAI-compatible endpoint on :8799 for testing
 uv run --extra plot python examples/india_vs_peers.py                 # writes examples/output/ (gitignored)
 ```
 
@@ -36,7 +37,10 @@ src/indiamacro/
     data.py       @memo'd loaders shared between pages
     events.py     built-in + user event registry, event_study()
     stories_*.py  the dashboard pages (india, energy, templates = shock/trend analyses, tools)
-  web/            stdlib http.server + static/ (index.html, app.js, style.css; Plotly front end)
+  monitor/        the terminal backend: env.py (.env loader), feeds.py (live feeds -> {status: live|sim} envelopes),
+                  sim.py (labelled fakes), query.py (SERIES registry + tools), assistant.py (LLM/mock analyst), fake_llm.py
+  web/            stdlib http.server + static/ (index.html, app.js, style.css: dashboard;
+                  terminal.html/.js/.css: Leaflet + satellite.js + Plotly terminal; /api/live/*, /api/ask, /api/tool)
 docs/SOURCES.md        codes, coverage and quirks per source
 docs/SOURCE_STATUS.md  output of the last ping run
 LIMITATIONS.md         missing data, lags, proxies, method caveats, fragile connections
@@ -104,6 +108,16 @@ event study; use `log=False` for spreads/levels such as cracks.
 3. Add a `Check` to `ping.CHECKS` (this automatically adds a live test).
 4. Document it in README's source table, `docs/SOURCES.md`, and LIMITATIONS.md if relevant.
 5. Offline tests in `tests/test_offline.py` should parse canned payloads, never hit the network.
+
+## Terminal conventions
+
+- Every feed returns an envelope and falls back to `sim.py` data on failure; the UI must show the SIM badge.
+  Never let simulated values reach an answer without "SIMULATED" in the tool text.
+- Tool results carry `text` (numbers computed in Python), `charts`, `sources`, `sim`. The LLM only explains them.
+- Charts: one y-axis only (different units -> small multiples); categorical colours in fixed order.
+- LLM config: `LLM_ENDPOINT`/`LLM_API_KEY`/`LLM_MODEL`, with `OPENAI_BASE_URL`/`OPENAI_API_KEY`/`OPENAI_MODEL`
+  as fallbacks. `.env` is gitignored; never commit it.
+- Basemap is Esri dark gray (CARTO now needs a key). CelesTrak asks for <= 1 download per group per 2 h.
 
 ## Known issue
 

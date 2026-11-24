@@ -76,7 +76,38 @@ CHECKS = [
     Check("UN Comtrade", "India crude imports, one month (US$)",
           lambda: energy.comtrade("IND", "crude", months=1, end=pd.Timestamp.today() - pd.DateOffset(months=4))
           .groupby("date", as_index=False)["value_usd"].sum().rename(columns={"value_usd": "value"})),
+    # terminal live feeds (monitor.feeds); a simulated fallback counts as a failure here
+    Check("USGS earthquakes", "M4.5+ quakes, past 7 days (magnitude)",
+          lambda: _feed(lambda f: f.quakes(), "time", "mag", unit="ms")),
+    Check("NASA EONET", "Open natural events, past 30 days (count per day)",
+          lambda: _feed(lambda f: f.natural_events(), "date", None)),
+    Check("OpenSky Network", "Aircraft over India now (count)",
+          lambda: _feed(lambda f: f.aircraft(), None, None)),
+    Check("Open-Meteo", "PM2.5 in tracked cities now (µg/m³)",
+          lambda: _feed(lambda f: f.weather(), "time", "pm25")),
+    Check("CelesTrak", "GNSS satellites with current elements (count)",
+          lambda: _feed(lambda f: f.satellites("gnss"), None, None)),
+    Check("Yahoo Finance", "Terminal watchlist, 5-min bars (latest quote)",
+          lambda: _feed(lambda f: f.quotes(), "time", "last")),
 ]
+
+
+def _feed(get, date_col: str | None, value_col: str | None, unit: str | None = None) -> pd.DataFrame:
+    """Turn a terminal feed envelope into ``date, value`` rows (count per date if ``value_col`` is None)."""
+    from .monitor import feeds
+
+    feeds.clear()
+    env = get(feeds)
+    if env["status"] != "live":
+        raise _http.SourceError(env["feed"], f"fell back to simulation: {env['note']}")
+    df = pd.DataFrame(env["data"])
+    if date_col is None:
+        return pd.DataFrame({"date": [pd.Timestamp.now().normalize()], "value": [float(len(df))]})
+    df["date"] = (pd.to_datetime(df[date_col], unit=unit) if unit else
+                  pd.to_datetime(df[date_col], utc=True, errors="coerce").dt.tz_localize(None))
+    if value_col is None:
+        return df.groupby(df["date"].dt.normalize()).size().rename("value").reset_index()
+    return df.rename(columns={value_col: "value"})[["date", "value"]].dropna()
 
 NOT_AUTOMATED = [
     ("RBI DBIE (data.rbi.org.in)", "API needs registration, session tokens and a captcha; "

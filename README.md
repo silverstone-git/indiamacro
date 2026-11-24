@@ -45,6 +45,43 @@ and recompute on **Run**. Events you add on the Events page (say, last week's dr
 refinery) are saved to `~/.local/share/indiamacro/events.json` and immediately show up in event
 studies and as markers on charts.
 
+## The terminal
+
+```bash
+./interact                 # then open http://localhost:8765/terminal  (or the TERMINAL link in the dashboard)
+```
+
+A dense, keyboard-first monitor for journalists, analysts and investors. One screen holds:
+
+| Panel | What it shows (all free sources, no keys) |
+|---|---|
+| Ticker tape + WATCH | 20 markets (NIFTY, SENSEX, USD/INR, Brent, gold, UST 10Y, S&P 500, Bitcoin...), Yahoo Finance 5-min bars, delayed |
+| INDIA MACRO | Latest GDP, CPI, WPI, IIP, PLFS, repo, rupee, REER, reserves with dates and sources |
+| Map: 1 ECON | IMF WEO choropleth (growth, inflation, debt, current account...), night lights, shipping chokepoints |
+| Map: 2 TRAFFIC | Live aircraft in view (OpenSky ADS-B) and daily chokepoint transits vs their 1-year average (IMF PortWatch) |
+| Map: 3 CLIMATE | NASA GIBS satellite layers (true colour, land temperature, rain, aerosols), USGS quakes, NASA EONET hazards, city weather and PM2.5 |
+| Map: 4 GNSS | GPS, GLONASS, Galileo, BeiDou, NavIC and QZSS satellites propagated live from CelesTrak elements; how many are in view from any point |
+| Map: 5 ASTRO | Day/night and twilight bands, where the Sun and Moon are overhead, moon phase, ISS and Tiangong |
+| Map: 6 MIL-SAT | Publicly catalogued military and reconnaissance satellites by country, with an overflight watch for a chosen region |
+| CHART | Every chart produced by a command or an answer, in tabs |
+| ASK | Ask a question in plain English; the analyst runs tools (fetch, correlate with leads/lags, compare countries, event windows, live snapshot) and explains the numbers |
+| WIRE | Big quakes, hazards, market moves of 1.5% or more, chokepoint anomalies, hazardous air |
+
+Commands (press `/` to focus; Alt+1..6 switch map modes): `G india_cpi repo_rate`, `G brent yoy since 2015`,
+`CORR brent usdinr`, `CMP gdp_growth G20`, `CMP inflation IND,CHN,USA`, `WIN usdinr 2025-04-02`, `SAT ISS`,
+`GO Mumbai`, `LIST`. Anything else is sent to the analyst as a question.
+
+**The analyst.** Put an OpenAI-compatible endpoint in `.env` (see `.env.example`): `LLM_ENDPOINT`,
+`LLM_API_KEY`, optional `LLM_MODEL` (the `OPENAI_BASE_URL` / `OPENAI_API_KEY` / `OPENAI_MODEL` names work too).
+The model must support function calling; if it doesn't, the terminal picks the tools itself and the model only
+writes the answer. Without an endpoint, a **mock analyst** answers from the same tools with templated text,
+clearly labelled. Every number in an answer comes from a tool result. For testing without a key:
+`uv run python -m indiamacro.monitor.fake_llm` and point `LLM_ENDPOINT` at `http://127.0.0.1:8799/v1`.
+
+**SIM badges.** If a live source fails, its panel switches to a simulated stand-in with a pink **SIM** badge
+(hover any badge for source, time and error). `INDIAMACRO_DEMO=1` forces simulation everywhere, for offline
+demos. Never quote a SIM number.
+
 ## Sources
 
 | Module | Source | What you get | Key needed |
