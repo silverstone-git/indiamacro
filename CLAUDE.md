@@ -13,6 +13,7 @@ uv run pytest -m live                    # live tests: hit every real source ove
 uv run indiamacro-ping [--fresh] [--markdown docs/SOURCE_STATUS.md]   # live health check of all sources
 ./interact [--port 9000] [--no-browser]  # dashboard at http://localhost:8765 (= uv run indiamacro-web); terminal at /terminal
 uv run python -m indiamacro.monitor.fake_llm                         # fake OpenAI-compatible endpoint on :8799 for testing
+uv run --no-project --with playwright==1.57.0 python scripts/screenshots.py [--prod]   # UI check, see docs/TESTING.md
 uv run --extra plot python examples/india_vs_peers.py                 # writes examples/output/ (gitignored)
 ```
 
@@ -41,6 +42,10 @@ src/indiamacro/
                   sim.py (labelled fakes), query.py (SERIES registry + tools), assistant.py (LLM/mock analyst), fake_llm.py
   web/            stdlib http.server + static/ (index.html, app.js, style.css: dashboard;
                   terminal.html/.js/.css: Leaflet + satellite.js + Plotly terminal; /api/live/*, /api/ask, /api/tool)
+docs/README.md         START HERE for developer docs: ARCHITECTURE, DATA_MODEL, TERMINAL, API, RECIPES,
+                       DEBUGGING, PITFALLS (read before your first change), TESTING, DEPLOYMENT
+scripts/screenshots.py Playwright screenshots + JS-error/overflow report at phone..desktop sizes (local or --prod)
+deploy.sh              publish to https://t.aryan.cfd/indiamacro (see docs/DEPLOYMENT.md)
 docs/SOURCES.md        codes, coverage and quirks per source
 docs/SOURCE_STATUS.md  output of the last ping run
 LIMITATIONS.md         missing data, lags, proxies, method caveats, fragile connections

@@ -151,6 +151,11 @@ uv run --extra plot python examples/india_vs_peers.py   # charts -> examples/out
 See **[LIMITATIONS.md](LIMITATIONS.md)** for the full list: missing data, lags, proxies,
 method caveats of each template, and which connections are fragile.
 
+## For developers
+
+Architecture, data shapes, recipes for adding sources/pages/series/feeds, debugging, known pitfalls,
+testing and deployment are in [docs/README.md](docs/README.md).
+
 ## Citing
 
 Cite the original producer, not this package: e.g. *National Statistics Office,
