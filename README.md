@@ -3,6 +3,8 @@
 India-first access to **free** macroeconomic data, with international data for comparison.
 One `pip install`, tidy pandas output, consistent dates, and an on-disk cache.
 
+![The indiamacro terminal: live markets, India macro, live air traffic over South Asia, a Brent-vs-rupee chart and the AI analyst's answer](docs/img/terminal.webp)
+
 ```python
 import indiamacro as im
 
@@ -30,6 +32,12 @@ run("tpl_refinery", {"post": 10})           # any dashboard page, as data
 Every page is live data, rendered as interactive charts (zoom, hover, 1Y/5Y/All, PNG and CSV
 download), with a "What the data says" summary computed from the numbers and a method/caveats
 note you can cite.
+
+![Dashboard overview: India at a glance, 12 headline tiles with sparklines and sources](docs/img/dashboard-overview.webp)
+
+| Refining margins and product cracks | Event study: refinery strikes |
+|---|---|
+| ![Daily diesel, gasoline and jet crack spreads with event markers](docs/img/dashboard-refining.webp) | ![Event study of drone strikes on refineries: average and per-event cumulative abnormal change](docs/img/dashboard-event-study.webp) |
 
 | Section | Pages |
 |---|---|
